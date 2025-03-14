@@ -13,10 +13,13 @@ function App() {
       currentWindow: true,
     });
 
+    const left = '50%';
+    const top = '50%';
+
     chrome.scripting.executeScript({
       target: { tabId: tab.id },
       func: injectGuides,
-      args: [transparent, color, height, width],
+      args: [transparent, color, height, width, top, left],
     });
   };
   const removeGuide = async () => {
@@ -79,7 +82,7 @@ function App() {
           <input
             type="text"
             placeholder="Color"
-            className='h-[37px]'
+            className="h-[37px]"
             value={color}
             onChange={(e) => setColor(e.target.value)}
           />
@@ -144,25 +147,12 @@ function App() {
   );
 }
 
-function injectGuides(transparent, color, height, width) {
-  const guidesContainer = document.createElement('div');
-  guidesContainer.id = 'guidesContainer';
-  Object.assign(guidesContainer.style, {
-    position: 'fixed',
-    top: '0',
-    left: '0',
-    width: '100%',
-    height: '100%',
-    pointerEvents: 'none',
-    background: 'transparent',
-    zIndex: '9999',
-  });
-
+function injectGuides(transparent, color, height, width, top, left) {
   const textArea = document.createElement('textarea');
   Object.assign(textArea.style, {
     position: 'fixed',
-    left: '50%',
-    top: '50%',
+    left: top || '50%',
+    top: left || '50%',
     width: width || '200px',
     height: height || '50px',
     transform: 'translate(-50%, -50%)',
@@ -183,12 +173,29 @@ function injectGuides(transparent, color, height, width) {
     offsetX = 0,
     offsetY = 0;
 
-  textArea.addEventListener('mousedown', (e) => {
+  textArea.addEventListener('mousedown', (e: any) => {
     if (!e.metaKey) {
       isDragging = true;
       const rect = textArea.getBoundingClientRect();
       offsetX = e.clientX - rect.left;
       offsetY = e.clientY - rect.top;
+    }
+  });
+
+  textArea.addEventListener('keydown', (e: any) => {
+    if (e.key == 'Alt') {
+      console.dir(textArea);
+      injectGuides(
+        transparent,
+        color,
+        textArea.offsetHeight + 'px',
+        textArea.offsetWidth + 'px',
+        Number(textArea.style.top.slice(0, -2)) + 1 + 'px',
+        Number(textArea.style.left.slice(0, -2)) + 1 + 'px'
+      );
+    }
+    if (e.key == 'Backspace') {
+      textArea.remove();
     }
   });
 
@@ -210,12 +217,11 @@ function injectGuides(transparent, color, height, width) {
 
   observer.observe(textArea);
 
-  guidesContainer.appendChild(textArea);
-  document.body.appendChild(guidesContainer);
+  document.body.appendChild(textArea);
 }
 
 function clearGuides() {
-  const guides = document.querySelectorAll('#guidesContainer');
+  const guides = document.querySelectorAll('textarea');
   const lastGuide = guides[guides.length - 1];
 
   if (lastGuide) {
