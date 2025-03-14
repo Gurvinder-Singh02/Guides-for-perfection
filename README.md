@@ -1,54 +1,30 @@
-# React + TypeScript + Vite
+# Guides for Perfection
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Overview
+Guides for Perfection is a Chrome extension designed for designers who demand pixel-perfect precision. It overlays customizable guides and grids on web pages to help create accurate layouts with ease.
 
-Currently, two official plugins are available:
+## Features
+- Add and customize on-screen guides for precise alignment.
+- Toggle grids to maintain design consistency.
+- Simple and intuitive UI for seamless interaction.
+- Works on any webpage with a single click.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Installation
+1. Download the extension from the Chrome Web Store.
+2. Click on the extension icon to activate guides.
+3. Customize the layout as needed for perfect design alignment.
 
-## Expanding the ESLint configuration
+## Permissions Explanation
+- **activeTab**: Allows temporary access to the current tab when the user interacts with the extension.
+- **scripting**: Enables injecting scripts for overlaying guides and grids.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Usage
+1. Click on the extension icon to enable the guide overlay.
+2. Adjust the grid and guides using the provided options.
+3. Enjoy precise alignment for your designs!
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+## Privacy Policy
+This extension does **not** collect, store, or share user data. It only interacts with the active tab upon user action.
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+## Support
+For issues or feature requests, contact [Your Email or Support Link](https://www.youtube.com/watch?v=qJvxt2Nxeqo).

@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import './App.css';
+import { MoveHorizontal, MoveVertical } from 'lucide-react';
 
 function App() {
-  const [color, setColor] = useState('red');
-  const [height, setHeight] = useState('100px');
-  const [width, setWidth] = useState('100px');
+  const [color, setColor] = useState('#ff0000');
+  const [transparent, setTransparent] = useState(true);
+  const [height, setHeight] = useState('10%');
+  const [width, setWidth] = useState('10%');
 
   const createGuide = async () => {
     const [tab] = await chrome.tabs.query({
@@ -15,7 +16,7 @@ function App() {
     chrome.scripting.executeScript({
       target: { tabId: tab.id },
       func: injectGuides,
-      args: [color, height, width],
+      args: [transparent, color, height, width],
     });
   };
   const removeGuide = async () => {
@@ -31,77 +32,119 @@ function App() {
   };
 
   return (
-    <main>
-      <h1>Guides</h1>
-      <p style={{ marginTop: '-20px' }}>
-        For the perfectionists <br /> who tweak every Fu***kin pixels
+    <main className=" gap-2 pt-5 w-[300px] fcc">
+      <h1 className="text-4xl gap-2 fc font-medium tracking-tight">
+        <img src="/icons/icon128.png" width={40} alt="icon" /> Guides
+      </h1>
+      <p className="fcc mb-3 text-center  w-full">
+        For the perfectionists <br /> who tweak every Fu*******kin pixels
       </p>
 
-      <div
-        className="card main"
-        style={{
-          width: '220px',
-          height: '300px',
-          margin: '0 auto',
-        }}
-      >
-        <div style={{ display: 'flex', gap: '3px' }}>
-          <button onClick={() => setColor('red')}>Red</button>
-          <button onClick={() => setColor('blue')}>blue</button>
-          <button onClick={() => setColor('limegreen')}>Green</button>
+      <div className="w-full gap-2 px-5 fcc">
+        <div className="fc gap-1">
+          <button onClick={() => setColor('#ff0000')}>Red</button>
+          <button onClick={() => setColor('#0000ff')}>blue</button>
+          <button onClick={() => setColor('#00E40B')}>Green</button>
 
           <button
             onClick={() => {
-              setColor('01');
-              setHeight('100px');
-              setWidth('97%');
+              setTransparent((x) => !x);
             }}
+            className={
+              !transparent
+                ? 'bg-white! text-black! text-nowrap '
+                : 'text-nowrap'
+            }
           >
-            01
+            Bg {!transparent ? 'None' : 'fill'}
           </button>
           <button
+            className="h-full py-3"
             onClick={() => {
-              setColor('02');
-              setWidth('100px');
-              setHeight('97%');
+              setWidth(100 + '%');
             }}
           >
-            02
+            <MoveHorizontal size={15} />
+          </button>
+          <button
+            className="h-full py-3"
+            onClick={() => {
+              setHeight(100 + '%');
+            }}
+          >
+            <MoveVertical size={15} />
           </button>
         </div>
-        <input
-          type="text"
-          placeholder="Color"
-          value={color}
-          onChange={(e) => setColor(e.target.value)}
-        />
-        Width:
+        <div className="w-full fc  ">
+          <input
+            type="text"
+            placeholder="Color"
+            className='h-[37px]'
+            value={color}
+            onChange={(e) => setColor(e.target.value)}
+          />
+          <input
+            className="px-0  h-10  "
+            value={color}
+            type="color"
+            onChange={(e) => setColor(e.target.value)}
+          />
+        </div>
+        <div className="flex justify-between w-full mt-3 gap-2">
+          Width:{' '}
+          <input
+            type="range"
+            min="0%"
+            max="100%"
+            value={parseInt(width)}
+            onChange={(e) => setWidth(e.target.value + '%')}
+          />
+        </div>
         <input
           type="text"
           placeholder="Width"
           value={width}
-          onChange={(e) => setWidth(e.target.value)}
+          onChange={(e) => setWidth(e.target.value + '%')}
         />
-        Height:
+        <div className="flex justify-between w-full mt-3 gap-2">
+          Height:
+          <input
+            type="range"
+            min="0"
+            max="100"
+            value={parseInt(height)}
+            onChange={(e) => setHeight(e.target.value + '%')}
+          />
+        </div>
         <input
           type="text"
           placeholder="Height"
           value={height}
           onChange={(e) => setHeight(e.target.value)}
-          style={{ marginBottom: '15px' }}
         />
-        <button onClick={createGuide}>Add Resizable Guides</button>
-        <button onClick={removeGuide}>Remove Last Guide</button>
+        <p className=" text-center opacity-45 text-[10px] ">
+          Click to drag The Guide <br />
+          Press and Hold ⌘ on corner to resize
+        </p>
+        <button className="w-full py-2!" onClick={createGuide}>
+          Add Resizable Guides
+        </button>
+        <button className="w-full py-2!" onClick={removeGuide}>
+          Remove Last Guide
+        </button>
       </div>
 
-      <p className="read-the-docs">
-        Extension Created by <a href="https://gxuri.in">© Gxuri</a>
+      <p className=" mt-7 mb-3 opacity-45 text-[10px] ">
+        Created by ⌘ &nbsp;
+        <a className="text-blue-500" href="https://gxuri.in">
+          © Gxuri
+        </a>
       </p>
     </main>
   );
 }
 
-function injectGuides(color, height, width) {
+function injectGuides(transparent, color, height, width) {
   const guidesContainer = document.createElement('div');
   guidesContainer.id = 'guidesContainer';
   Object.assign(guidesContainer.style, {
@@ -123,19 +166,9 @@ function injectGuides(color, height, width) {
     width: width || '200px',
     height: height || '50px',
     transform: 'translate(-50%, -50%)',
-    border: `0.7px solid ${
-      color === '01' ? 'red' : color === '02' ? 'green' : color
-    }`,
-    background:
-      color === 'red'
-        ? 'rgba(255, 0, 0, 0.1)'
-        : color === 'blue'
-        ? 'rgba(0, 0,255, 0.1)'
-        : color === 'green'
-        ? 'rgba(0, 255, 0, 0.1)'
-        : 'transparent',
-    color:
-      color == '01' ? 'transparent' : color == '02' ? 'transparent' : color,
+    border: `0.7px solid ${color}`,
+    background: !transparent ? 'transparent' : `${color}44`,
+    color: !transparent ? 'transparent' : color,
     fontSize: '10px',
     pointerEvents: 'auto',
     cursor: 'move',
