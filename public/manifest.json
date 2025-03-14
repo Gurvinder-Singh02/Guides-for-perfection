@@ -1,0 +1,11 @@
+{
+  "manifest_version": 3,
+  "name": "Guides for Perfection",
+  "version": "1.0",
+  "description": "For designers who won't settle for 'good enough'—bring pixel-perfect magic to every project with this ultimate Guides for website sidekick!",
+  "action": {
+    "default_popup": "index.html"
+  },
+  "permissions": ["scripting", "tabs", "activeTab"],
+  "host_permissions": ["https://*/*", "http://*/*"]
+}
